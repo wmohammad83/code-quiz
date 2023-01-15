@@ -1,103 +1,104 @@
-const startButton = document.getElementById("start");
-const nextButton = document.getElementById("next-btn");
-const startScreen = document.getElementById("start-screen");
-const questionContainerElement = document.getElementById("questions");
-const questionElement = document.getElementById("question-title");
-const answerButtonElement = document.getElementById("choices");
-const feedback = document.getElementById("feedback");
-const endScreen = document.getElementById("end-screen");
-const finalScore = document.getElementById("final-score");
+// ==============================================================================================
+// SELECTORS
+// ==============================================================================================
+var timeElement = document.querySelector('#time');
+var startScreen = document.querySelector('#start-screen');
+var startButton = document.querySelector('#start');
+var questionsElement = document.querySelector('#questions');
+var answersElement = document.querySelector('#answers');
+var endScreen = document.querySelector('#end-screen');
+var finalScore = document.querySelector('#final-score');
+var initials = document.querySelector('#initials');
+var submit = document.querySelector('#submit');
 
-var score;
-var currentQuestionIndex;
 
-startButton.addEventListener("click", startGame);
-nextButton.addEventListener("click", () => {
-  currentQuestionIndex++;
-  setNextQuestion();
-});
+// ==============================================================================================
+// INITIAL STATES
+// ==============================================================================================
+var isWin = false;
+var isLooser = false;
+var timer;
+var timerCount;
+var questionIndex = 0;
 
-function startGame() {
-  startScreen.classList.add("hide");
-  score = 0;
-  currentQuestionIndex = 0;
-  questionContainerElement.classList.remove("hide");
-  setNextQuestion();
+// ==============================================================================================
+// RESET
+// ==============================================================================================
+function reset(){
+    questionIndex = 0;
 }
 
-function setNextQuestion() {
-  resetState();
-  showQuestion(questions[currentQuestionIndex]);
+// ==============================================================================================
+// START QUIZ
+// ==============================================================================================
+// A start button that when clicked a timer starts and the first question appears.
+function startQuiz(){
+    timerCount = 5
+    startTimer()
+    startScreen.classList.add('hide')
+    questionsElement.classList.remove('hide')
 }
 
-function showQuestion(question) {
-  // Displays the question
-  questionElement.innerText = question.question;
 
-  // Displays the answers
-  question.answers.forEach((answer) => {
-    const button = document.createElement("button");
-    button.innerText = answer.text;
-    // can add a class using below
-    // button.classList.add("choices");
+// ==============================================================================================
+// START TIMER
+// ==============================================================================================
+function startTimer(){
+    // SETS TIMER
+    timer = setInterval(function() {
+        timerCount--;
+        timeElement.textContent = timerCount;
+        if (timerCount >= 0){
+            // TEST IF QUIZ IS COMPLETE IN TIME
+            if (isWin && timerCount > 0){
+                clearInterval(timer)
+                // WINNER AND DISPLAYS THE INITIALS SCREEN FOR TRACKING SCORE
+                // ===========================================================
+                // CODE TO COMPLETE
+            }
+        }
+        // TESTS IF TIME HAS RAN OUT
+        if (timerCount === 0) {
+            questionsElement.classList.add('hide')
+            endScreen.classList.remove('hide')
+            clearInterval(timer)
+            // FUNCTION FOR LOOSER
+            // ===========================================
 
-    // check if our answer is correct
-    if (answer.correct) {
-      button.dataset.correct = answer.correct;
-    }
-    button.addEventListener("click", selectAnswer);
-    answerButtonElement.appendChild(button);
-  });
+        }
+    }, 1000);
 }
 
-function resetState() {
-  nextButton.classList.add("hide");
-  while (answerButtonElement.firstChild) {
-    answerButtonElement.removeChild(answerButtonElement.firstChild);
-  }
-}
 
-function selectAnswer(event) {
-  var selectedButton = event.target;
-  const correct = selectedButton.dataset.correct;
 
-  console.log(correct);
 
-  answerCheck(selectedButton, correct);
 
-  Array.from(answerButtonElement.children).forEach((button) => {
-    answerCheck(button, button.dataset.correct);
-  });
+// ==============================================================================================
+// Questions contain buttons for each answer.
+// ==============================================================================================
 
-  if (questions.length > currentQuestionIndex + 1) {
-    nextButton.classList.remove("hide");
-  } else {
-    questionContainerElement.classList.add("hide");
-    endScreen.classList.remove("hide");
+// ==============================================================================================
+// When answer is clicked, the next question appears
+// ==============================================================================================
 
-    finalScore.innerText = score;
-  }
-}
 
-function answerCheck(element, correct) {
-  feedback.classList.remove("hide");
+// ==============================================================================================
+// If the answer clicked was incorrect then subtract time from the clock
+// ==============================================================================================
 
-  if (correct) {
-    console.log("correct answer");
-    feedback.innerText = "Correct Answer";
-    document.body.appendChild(feedback);
 
-    // add to score card
-    score = score + 10;
-    console.log(score);
-  } else {
-    // element.classList.add("wrong");
-    console.log("Wrong Answer");
-    feedback.innerText = "Wrong answer";
+// ==============================================================================================
+// The quiz should end when all questions are answered or the timer reaches 0.
+// ==============================================================================================
 
-    // remove time from timer
-  }
 
-  
-}
+// ==============================================================================================
+// When the game ends, it should display their score and give the user the ability to save their initials and their score
+// ==============================================================================================
+
+
+// ==============================================================================================
+// Attach event listener to start button to call startGame function on click
+// ==============================================================================================
+startButton.addEventListener("click", startQuiz);
 
