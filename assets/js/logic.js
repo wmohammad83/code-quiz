@@ -70,12 +70,16 @@ function displayQuestion() {
 function checkAnswer(answer) {
   if (answer.value === questions[currentQuestion].correctAnswer) {
     score++;
+    feedback.classList.remove('hide')
+    feedback.textContent = 'Correct Answer'
   } else {
     // ==============================================================================================
     // IF THE ANSWER IS INCORRECT, TAKE 10S OFF THE CLOCK
     // ==============================================================================================
 
     timer -= 10;
+    feedback.classList.remove('hide')
+    feedback.textContent = 'Incorrect Answer'
   }
 
   currentQuestion++;
@@ -93,6 +97,7 @@ function checkAnswer(answer) {
 function endQuiz() {
   clearInterval(intervalId);
   questionsElement.classList.add("hide");
+  feedback.classList.add('hide')
   endScreen.classList.remove("hide");
   finalScore.innerHTML = score;
 }
