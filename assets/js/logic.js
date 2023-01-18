@@ -108,7 +108,7 @@ function saveScore() {
   // SAVES TO LOCAL STORAGE
   // ==============================================================================================
   localStorage.setItem("player", JSON.stringify(player));
-  window.location.href = "/highscores.html";
+  window.location.href = "/code-quiz/highscores.html";
 }
 
 // ==============================================================================================
